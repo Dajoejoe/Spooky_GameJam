@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
 
@@ -58,9 +59,7 @@ public class Player : MonoBehaviour {
                 return null;
             var gameObjectHit = hit.collider.gameObject;
             var highlight = gameObjectHit.GetComponent<Board>();
-            if (highlight != null && highlight != highlightedObject && 
-                ((highlight.window != null && !highlight.window.isDead) || (highlight.door != null && !highlight.isBroken)))
-            {
+            if (highlight != null) {
                 highlight.Highlight(true);
                 highlightedObject = highlight;
                 return highlight;
@@ -98,7 +97,6 @@ public class Player : MonoBehaviour {
                     if (brokeBoard)
                     {
                         highlightedObject.Highlight(false);
-                        highlightedObject = null;
                     }
                 }
                 else
@@ -107,11 +105,18 @@ public class Player : MonoBehaviour {
                     if (destroyed && board.window != null && board.window.isDead)
                     {
                         highlightedObject.Highlight(false);
-                        highlightedObject = null;
                     }
                 }
             }
             timer = delay;
+        }
+    }
+
+    void OnColliionEnter(Collider colider)
+    {
+        if (colider.tag == Tags.Zombie)
+        {
+            SceneManager.LoadScene(0);
         }
     }
 }

@@ -35,6 +35,8 @@ public class Board : MonoBehaviour {
 
     public bool Damage(int amt)
     {
+        if (currentHealth <= 0)
+            return true;
         ps.Play();
         AdjustHealth(-amt);
         if (currentHealth <= 0)
@@ -47,14 +49,15 @@ public class Board : MonoBehaviour {
 
     public bool Repair(int amt)
     {
+        if (currentHealth == maxHealth)
+            return true;
         AdjustHealth(amt);
-        Debug.Log("Repair: " + currentHealth);
-        if (amt == maxHealth && isBroken)
+        if (currentHealth == maxHealth && isBroken)
         {
             isBroken = false;
             GetComponent<Renderer>().enabled = true;
         }
-        return amt == maxHealth;
+        return currentHealth == maxHealth;
     }
 
     private void AdjustHealth(int amt)
@@ -68,6 +71,17 @@ public class Board : MonoBehaviour {
         {
             return;
         }
+        if (door != null && door.isDead)
+        {
+            _renderer.enabled = false;
+            return;
+        }
+        if (window != null && window.isDead)
+        {
+            _renderer.enabled = false;
+            return;
+        }
+
         isHighlighted = highlight;
 
         if (highlight)

@@ -54,7 +54,7 @@ public class ZombieMove : MonoBehaviour {
                 if (timer <= 0)
                 {
                     // Attack - return bool of window broken
-                    if (window.AttackWindow(attack))
+                    if (window.AttackWindow(attack) || window.isDead)
                     {
                         state = ZombieState.EnteringWindow;
                         SetNextNode();
