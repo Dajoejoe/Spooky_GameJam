@@ -45,6 +45,8 @@ public class Board : MonoBehaviour {
             return true;
         ps.Play();
         AdjustHealth(-amt);
+        if (!transform.FindChild("Break").GetComponent<AudioSource>().isPlaying)
+            transform.FindChild("Break").GetComponent<AudioSource>().Play();
         if (currentHealth <= 0)
         {
             isBroken = true;
@@ -62,6 +64,8 @@ public class Board : MonoBehaviour {
         if (currentHealth == maxHealth)
             return true;
         AdjustHealth(amt);
+        if (!transform.FindChild("Build").GetComponent<AudioSource>().isPlaying)
+            transform.FindChild("Build").GetComponent<AudioSource>().Play();
         if (currentHealth == maxHealth && isBroken)
         {
             isBroken = false;
