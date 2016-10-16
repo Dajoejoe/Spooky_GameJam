@@ -84,7 +84,6 @@ public class Player : MonoBehaviour {
             if (hit.distance > 3)
                 return null;
             var gameObjectHit = hit.collider.gameObject;
-            Debug.Log(highlightedObject);
             if (gameObjectHit.GetComponent<Board>() || gameObjectHit.GetComponent<Key>() || gameObjectHit.GetComponent<Journal>())
             { 
                 if (highlightedObject == null && !(gameObjectHit.GetComponent<Board>() && gameObjectHit.GetComponent<Board>().isBroken && gameObjectHit.GetComponent<Board>().door))
