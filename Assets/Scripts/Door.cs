@@ -13,6 +13,8 @@ public class Door : MonoBehaviour {
     void Start () {
         animator = GetComponent<Animator>();
         isDead = false;
+        if (transform.FindChild("Boards") == null)
+            return;
         boards = transform.FindChild("Boards").GetComponentsInChildren<Board>();
         if (boardCount == 0)
         {
