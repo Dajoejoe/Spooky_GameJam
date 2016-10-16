@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class ZombieMove : MonoBehaviour {
 
-    public GameObject targetNodes;
+    public Window window;
     public float speed;
     public float attackSpeed = 1f;
+    public int attack = 2;
 
     int nodeIndex = 0;
+    GameObject targetNodes;
     Transform currentTarget;
     Transform parentTransform;
     Vector3 direction;
@@ -24,6 +26,7 @@ public class ZombieMove : MonoBehaviour {
     void Start () {
         state = ZombieState.MovingToWindow;
         parentTransform = transform.parent;
+        targetNodes = window.transform.FindChild("Nodes").gameObject;
         SetNextNode();
         direction = Vector3.Normalize(currentTarget.transform.position - parentTransform.position);
     }
@@ -38,10 +41,8 @@ public class ZombieMove : MonoBehaviour {
 
                 if (ReachedTarget())
                 {
-                    Debug.Log("reached window");
-                    state = ZombieState.EnteringWindow;
+                    state = ZombieState.AttackingWindow;
                     timer = attackSpeed;
-                    SetNextNode();
                 }
                 break;
             case ZombieState.AttackingWindow:
@@ -49,6 +50,11 @@ public class ZombieMove : MonoBehaviour {
                 if (timer <= 0)
                 {
                     // Attack - return bool of window broken
+                    if (window.AttackWindow(attack))
+                    {
+                        state = ZombieState.EnteringWindow;
+                        SetNextNode();
+                    }
                     timer = attackSpeed;
                 }
                 break;
@@ -57,7 +63,6 @@ public class ZombieMove : MonoBehaviour {
 
                 if (ReachedTarget())
                 {
-                    Debug.Log(nodeIndex);
                     if (nodeIndex == 2)
                     {
                         SetNextNode();
@@ -66,7 +71,6 @@ public class ZombieMove : MonoBehaviour {
                     {
                         currentTarget = GameObject.FindGameObjectWithTag(Tags.Player).transform;
                         state = ZombieState.MovingToPlayer;
-                        Debug.Log("movign to player");
                     }
                 }
 

@@ -31,8 +31,10 @@ public class Window : MonoBehaviour {
 		
 	}
 
+    // Returns whether the whole window is broken
     public bool AttackWindow(int amt)
     {
+        bool brokeBoard = false;
         for (int i=0; i < boards.Length; i++)
         {
             if (!boards[i].isActive || boards[i].isBroken)
@@ -40,9 +42,26 @@ public class Window : MonoBehaviour {
                 continue;
             }
 
-
+            brokeBoard = boards[i].Damage(amt);
         }
 
-        return true;
+        if (brokeBoard)
+        {
+            for (int i = 0; i < boards.Length; i++)
+            {
+                if (!boards[i].isActive || boards[i].isBroken)
+                {
+                    continue;
+                }
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public bool RepairWindow(int amt, Board board)
+    {
+        return board.Repair(amt);
     }
 }
