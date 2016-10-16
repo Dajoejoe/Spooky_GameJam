@@ -108,4 +108,9 @@ public class Board : MonoBehaviour {
             _renderer.material.color = originalColor;
         }
     }
+
+    public float HealthPercentage()
+    {
+        return (float)currentHealth / (float)maxHealth ;
+    }
 }

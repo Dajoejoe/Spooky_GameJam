@@ -11,10 +11,15 @@ public class Player : MonoBehaviour {
 
     float timer;
     Board highlightedObject;
+    GameObject healthBarGameObject;
+    GameObject healthBar;
 	// Use this for initialization
 	void Start () {
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.Confined;
+        healthBarGameObject = GameObject.FindGameObjectWithTag(Tags.HealthBar);
+        healthBar = healthBarGameObject.transform.FindChild("BG").FindChild("HealthBar").gameObject;
+        healthBarGameObject.SetActive(false);
 	}
 	
 	// Update is called once per frame
@@ -26,11 +31,14 @@ public class Player : MonoBehaviour {
             {
                 CheckForInput();
             }
+            healthBarGameObject.SetActive(true);
+            healthBar.transform.localScale = new Vector3(board.HealthPercentage(), 1, 1);
         }
         else if (highlightedObject != null)
         {
             highlightedObject.Highlight(false);
             highlightedObject = null;
+            healthBarGameObject.SetActive(false);
         }
 
         if (timer > 0)
