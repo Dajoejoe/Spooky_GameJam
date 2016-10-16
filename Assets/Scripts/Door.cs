@@ -2,18 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Window : MonoBehaviour {
+public class Door : MonoBehaviour {
 
     public int boardCount;
     public bool isDead;
 
     Board[] boards;
-
-	// Use this for initialization
-	void Start () {
+    Animator animator;
+    // Use this for initialization
+    void Start () {
+        animator = GetComponent<Animator>();
         isDead = false;
         boards = transform.FindChild("Boards").GetComponentsInChildren<Board>();
-		if (boardCount == 0)
+        if (boardCount == 0)
         {
             boardCount = boards.Length;
         }
@@ -27,29 +28,18 @@ public class Window : MonoBehaviour {
         }
         foreach (var board in boards)
         {
-            board.window = this;
+            board.door = this;
         }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
-
-    // Returns whether the whole window is broken
-    public bool AttackWindow(int amt)
+    public bool AttackDoor(int amt, Board board)
     {
-        bool brokeBoard = false;
-        for (int i=0; i < boards.Length; i++)
-        {
-            if (!boards[i].isActive || boards[i].isBroken)
-            {
-                continue;
-            }
-            brokeBoard = boards[i].Damage(amt);
-            break;
-        }
-
+        bool brokeBoard = board.Damage(amt);
+        
         if (brokeBoard)
         {
             isDead = true;
@@ -63,10 +53,16 @@ public class Window : MonoBehaviour {
                 break;
             }
         }
-        return isDead;
+
+        if (isDead)
+        {
+            animator.SetTrigger("OpenDoor");
+        }
+
+        return brokeBoard;
     }
 
-    public bool RepairWindow(int amt, Board board)
+    public bool RepairDoor(int amt, Board board)
     {
         return board.Repair(amt);
     }

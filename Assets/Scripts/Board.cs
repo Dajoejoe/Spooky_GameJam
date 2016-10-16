@@ -4,20 +4,28 @@ using UnityEngine;
 
 public class Board : MonoBehaviour {
 
-    public bool isActive;
+    public bool isActive = true;
     public int maxHealth = 10;
     public bool isBroken;
     public Window window;
+    public Door door;
 
     int currentHealth;
     bool isHighlighted;
     MeshRenderer _renderer;
     Color originalColor;
+    ParticleSystem ps;
     // Use this for initialization
+    void Awake()
+    {
+        isActive = true;
+    }
+    
     void Start () {
         currentHealth = maxHealth;
         _renderer = GetComponent<MeshRenderer>();
         originalColor = _renderer.material.color;
+        ps = GetComponentInChildren<ParticleSystem>();
     }
 
     // Update is called once per frame
@@ -27,6 +35,7 @@ public class Board : MonoBehaviour {
 
     public bool Damage(int amt)
     {
+        ps.Play();
         AdjustHealth(-amt);
         Debug.Log("Damage: " + currentHealth);
         if (currentHealth <= 0)

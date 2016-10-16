@@ -16,6 +16,7 @@ public class ZombieMove : MonoBehaviour {
     Vector3 direction;
     ZombieState state;
     float timer;
+    Animator animator;
 
     enum ZombieState
     {
@@ -28,7 +29,9 @@ public class ZombieMove : MonoBehaviour {
         parentTransform = transform.parent;
         targetNodes = window.transform.FindChild("Nodes").gameObject;
         SetNextNode();
+        SetVerticalPosition();
         direction = Vector3.Normalize(currentTarget.transform.position - parentTransform.position);
+        animator = GetComponent<Animator>();
     }
 	
 	// Update is called once per frame
@@ -41,6 +44,7 @@ public class ZombieMove : MonoBehaviour {
 
                 if (ReachedTarget())
                 {
+                    Debug.Log("Start attacking");
                     state = ZombieState.AttackingWindow;
                     timer = attackSpeed;
                 }
@@ -54,6 +58,7 @@ public class ZombieMove : MonoBehaviour {
                     {
                         state = ZombieState.EnteringWindow;
                         SetNextNode();
+                        animator.SetTrigger("EnterWindow");
                     }
                     timer = attackSpeed;
                 }
@@ -71,6 +76,7 @@ public class ZombieMove : MonoBehaviour {
                     {
                         currentTarget = GameObject.FindGameObjectWithTag(Tags.Player).transform;
                         state = ZombieState.MovingToPlayer;
+                        animator.SetTrigger("ExitWindow");
                     }
                 }
 
@@ -86,8 +92,6 @@ public class ZombieMove : MonoBehaviour {
         currentTarget = targetNodes.transform.GetChild(nodeIndex);
         nodeIndex++;
         direction = Vector3.Normalize(currentTarget.transform.position - parentTransform.position);
-        Debug.Log(currentTarget);
-        Debug.Log(direction);
     }
     
     private bool ReachedTarget()
@@ -99,5 +103,12 @@ public class ZombieMove : MonoBehaviour {
     {
         direction = Vector3.Normalize(currentTarget.transform.position - parentTransform.position);
         parentTransform.position += direction * speed * Time.deltaTime;
+    }
+
+    private void SetVerticalPosition()
+    {
+        Vector3 pos = transform.position;
+        pos.z = currentTarget.position.z;
+        transform.position = pos;
     }
 }
