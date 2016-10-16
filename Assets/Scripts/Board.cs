@@ -41,7 +41,7 @@ public class Board : MonoBehaviour {
 
     public bool Damage(int amt)
     {
-        if (currentHealth <= 0)
+        if (isBroken) 
             return true;
         ps.Play();
         AdjustHealth(-amt);
@@ -49,6 +49,10 @@ public class Board : MonoBehaviour {
         {
             isBroken = true;
             GetComponent<Renderer>().enabled = false;
+            if (window)
+            {
+                window.CheckIfDead();
+            }
         }
         return currentHealth <= 0;
     }

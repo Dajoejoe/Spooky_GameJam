@@ -52,16 +52,7 @@ public class Window : MonoBehaviour {
 
         if (brokeBoard)
         {
-            isDead = true;
-            for (int i = 0; i < boards.Length; i++)
-            {
-                if (!boards[i].isActive || boards[i].isBroken)
-                {
-                    continue;
-                }
-                isDead = false;
-                break;
-            }
+            CheckIfDead();
         }
         return isDead;
     }
@@ -69,5 +60,19 @@ public class Window : MonoBehaviour {
     public bool RepairWindow(int amt, Board board)
     {
         return board.Repair(amt);
+    }
+
+    public void CheckIfDead()
+    {
+        isDead = true;
+        for (int i = 0; i < boards.Length; i++)
+        {
+            if (!boards[i].isActive || boards[i].isBroken)
+            {
+                continue;
+            }
+            isDead = false;
+            break;
+        }
     }
 }

@@ -112,9 +112,9 @@ public class Player : MonoBehaviour {
         }
     }
 
-    void OnColliionEnter(Collider colider)
+    void OnTriggerEnter(Collider collider)
     {
-        if (colider.tag == Tags.Zombie)
+        if (collider.tag == Tags.Zombie)
         {
             SceneManager.LoadScene(0);
         }
