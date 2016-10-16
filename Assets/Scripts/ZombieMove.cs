@@ -44,7 +44,6 @@ public class ZombieMove : MonoBehaviour {
 
                 if (ReachedTarget())
                 {
-                    Debug.Log("Start attacking");
                     state = ZombieState.AttackingWindow;
                     timer = attackSpeed;
                 }
@@ -68,16 +67,9 @@ public class ZombieMove : MonoBehaviour {
 
                 if (ReachedTarget())
                 {
-                    if (nodeIndex == 2)
-                    {
-                        SetNextNode();
-                    }
-                    else
-                    {
-                        currentTarget = GameObject.FindGameObjectWithTag(Tags.Player).transform;
-                        state = ZombieState.MovingToPlayer;
-                        animator.SetTrigger("ExitWindow");
-                    }
+                    currentTarget = GameObject.FindGameObjectWithTag(Tags.Player).transform;
+                    state = ZombieState.MovingToPlayer;
+                    animator.SetTrigger("ExitWindow");
                 }
 
                 break;
@@ -107,8 +99,8 @@ public class ZombieMove : MonoBehaviour {
 
     private void SetVerticalPosition()
     {
-        Vector3 pos = transform.position;
-        pos.z = currentTarget.position.z;
-        transform.position = pos;
+        Vector3 pos = parentTransform.position;
+        pos.y = currentTarget.position.y;
+        parentTransform.position = pos;
     }
 }
