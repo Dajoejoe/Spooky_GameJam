@@ -18,14 +18,16 @@ public class Journal : MonoBehaviour {
             originalColor = _renderer.material.color;
         }
         journal = GameObject.FindGameObjectWithTag(Tags.Journal);
-        journal.SetActive(false);
+        if (journal)
+            journal.SetActive(false);
     }
 	
 	// Update is called once per frame
 	void Update () {
-		if (journal.activeSelf && Input.GetKeyDown(KeyCode.Space))
+		if (journal != null && journal.activeSelf && Input.GetKeyDown(KeyCode.Space))
         {
             journal.SetActive(false);
+            Time.timeScale = 1;
         }
 	}
 

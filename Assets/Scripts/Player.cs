@@ -117,6 +117,7 @@ public class Player : MonoBehaviour {
             else if (highlightedObject.GetComponent<Journal>())
             {
                 highlightedObject.GetComponent<Journal>().ReadJournal();
+                Time.timeScale = 0;
             }
             timer = delay;
             return;
