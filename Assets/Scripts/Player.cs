@@ -40,8 +40,15 @@ public class Player : MonoBehaviour {
             }
             if (board.GetComponent<Board>())
             {
-                healthBarGameObject.SetActive(true);
-                healthBar.transform.localScale = new Vector3(board.GetComponent<Board>().HealthPercentage(), 1, 1);
+                if (board.GetComponent<Board>().HealthPercentage() == 0)
+                {
+                    healthBarGameObject.SetActive(false);
+                }
+                else
+                {
+                    healthBarGameObject.SetActive(true);
+                    healthBar.transform.localScale = new Vector3(board.GetComponent<Board>().HealthPercentage(), 1, 1);
+                }
             }
         }
         else if (highlightedObject != null)
@@ -80,7 +87,7 @@ public class Player : MonoBehaviour {
             Debug.Log(highlightedObject);
             if (gameObjectHit.GetComponent<Board>() || gameObjectHit.GetComponent<Key>() || gameObjectHit.GetComponent<Journal>())
             { 
-                if (highlightedObject == null)
+                if (highlightedObject == null && !(gameObjectHit.GetComponent<Board>() && gameObjectHit.GetComponent<Board>().isBroken && gameObjectHit.GetComponent<Board>().door))
                 {
                     highlightedObject = gameObjectHit;
                     HighlightObject(true);
@@ -93,7 +100,7 @@ public class Player : MonoBehaviour {
 
     private void CheckForInput()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && highlightedObject)
         {
             var board = highlightedObject.GetComponent<Board>();
             if (board != null)
@@ -115,10 +122,10 @@ public class Player : MonoBehaviour {
             timer = delay;
             return;
         }
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && highlightedObject)
         {
             var board = highlightedObject.GetComponent<Board>();
-            if (board != null)
+            if (board != null && !board.isBroken)
             {
                 if (board.door != null)
                 {
@@ -126,6 +133,7 @@ public class Player : MonoBehaviour {
                     if (brokeBoard)
                     {
                         HighlightObject(false);
+                        highlightedObject = null;
                     }
                 }
                 else
