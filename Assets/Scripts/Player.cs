@@ -44,12 +44,22 @@ public class Player : MonoBehaviour {
         var hits = Physics.RaycastAll(ray);
         if (hits.Length > 0)
         {
+            var hitList = new List<RaycastHit>();
             var hit = hits[0];
+            for (int i=0; i < hits.Length; i++)
+            {
+                if (hits[i].distance < hit.distance)
+                {
+                    hit = hits[i];
+                }
+            }
+
             if (hit.distance > 2)
                 return null;
             var gameObjectHit = hit.collider.gameObject;
             var highlight = gameObjectHit.GetComponent<Board>();
-            if (highlight != null && highlight != highlightedObject && !highlight.window.isDead)
+            if (highlight != null && highlight != highlightedObject && 
+                ((highlight.window != null && !highlight.window.isDead) || (highlight.door != null && !highlight.isBroken)))
             {
                 highlight.Highlight(true);
                 highlightedObject = highlight;
@@ -80,11 +90,23 @@ public class Player : MonoBehaviour {
             var board = highlightedObject.GetComponent<Board>();
             if (board != null)
             {
-                var destroyed = board.Damage(attack);
-                if (destroyed && board.window.isDead)
+                if (board.door != null)
                 {
-                    highlightedObject.Highlight(false);
-                    highlightedObject = null;
+                    var brokeBoard = board.door.AttackDoor(attack, board);
+                    if (brokeBoard)
+                    {
+                        highlightedObject.Highlight(false);
+                        highlightedObject = null;
+                    }
+                }
+                else
+                {
+                    var destroyed = board.Damage(attack);
+                    if (destroyed && board.window != null && board.window.isDead)
+                    {
+                        highlightedObject.Highlight(false);
+                        highlightedObject = null;
+                    }
                 }
             }
             timer = delay;
