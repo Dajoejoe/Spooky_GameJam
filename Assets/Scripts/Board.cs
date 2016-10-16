@@ -26,6 +26,12 @@ public class Board : MonoBehaviour {
         _renderer = GetComponent<MeshRenderer>();
         originalColor = _renderer.material.color;
         ps = GetComponentInChildren<ParticleSystem>();
+
+        if (isBroken == true)
+        {
+            currentHealth = 0;
+            GetComponent<Renderer>().enabled = false;
+        }
     }
 
     // Update is called once per frame
