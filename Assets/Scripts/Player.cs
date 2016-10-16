@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
     public int attack;
     public int repair;
     public float delay;
+    public AudioClip death;
 
     bool gotKey;
     float timer;
@@ -26,6 +27,10 @@ public class Player : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
         if (Time.timeScale == 0)
         {
             return;
@@ -173,6 +178,7 @@ public class Player : MonoBehaviour {
     {
         if (collider.tag == Tags.Zombie)
         {
+            gameObject.GetComponent<AudioSource>().PlayOneShot(death);
             SceneManager.LoadScene(1);
         }
     }
