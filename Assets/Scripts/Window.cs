@@ -5,9 +5,9 @@ using UnityEngine;
 public class Window : MonoBehaviour {
 
     public int boardCount;
+    public bool isDead;
 
     Board[] boards;
-    bool isDead;
 
 	// Use this for initialization
 	void Start () {
@@ -23,6 +23,10 @@ public class Window : MonoBehaviour {
             {
                 boards[i].gameObject.SetActive(false);
             }
+        }
+        foreach (var board in boards)
+        {
+            board.window = this;
         }
 	}
 	
@@ -53,11 +57,11 @@ public class Window : MonoBehaviour {
                 {
                     continue;
                 }
-                return false;
+                isDead = false;
             }
-            return true;
+            isDead = true;
         }
-        return false;
+        return isDead;
     }
 
     public bool RepairWindow(int amt, Board board)
