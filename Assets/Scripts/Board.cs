@@ -5,7 +5,7 @@ using UnityEngine;
 public class Board : MonoBehaviour {
 
     public bool isActive;
-    public int maxHealth;
+    public int maxHealth = 10;
     public bool isBroken;
 
     int currentHealth;
