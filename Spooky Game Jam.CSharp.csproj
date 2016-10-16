@@ -92,6 +92,8 @@
     <Compile Include="Assets\Scripts\CandleFlicker.cs" />
     <Compile Include="Assets\Scripts\Door.cs" />
     <Compile Include="Assets\Scripts\EndTrigger.cs" />
+    <Compile Include="Assets\Scripts\Journal.cs" />
+    <Compile Include="Assets\Scripts\Key.cs" />
     <Compile Include="Assets\Scripts\Node.cs" />
     <Compile Include="Assets\Scripts\NodeManager.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />

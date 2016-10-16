@@ -27,9 +27,17 @@ public class ZombieMove : MonoBehaviour {
     void Start () {
         state = ZombieState.MovingToWindow;
         parentTransform = transform.parent;
-        targetNodes = window.transform.FindChild("Nodes").gameObject;
-        SetNextNode();
-        SetVerticalPosition();
+        if (window == null)
+        {
+            state = ZombieState.MovingToPlayer;
+            currentTarget = GameObject.FindGameObjectWithTag(Tags.Player).transform;
+        }
+        else if (window.transform.FindChild("Nodes"))
+        {
+            targetNodes = window.transform.FindChild("Nodes").gameObject;
+            SetNextNode();
+            SetVerticalPosition();
+        }
         direction = Vector3.Normalize(currentTarget.transform.position - parentTransform.position);
         animator = GetComponent<Animator>();
     }

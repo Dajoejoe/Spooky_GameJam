@@ -9,8 +9,9 @@ public class Player : MonoBehaviour {
     public int repair;
     public float delay;
 
+    bool gotKey;
     float timer;
-    Board highlightedObject;
+    GameObject highlightedObject;
     GameObject healthBarGameObject;
     GameObject healthBar;
 	// Use this for initialization
@@ -23,20 +24,29 @@ public class Player : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        Board board = CheckForHighlight();
+	void Update ()
+    {
+        if (Time.timeScale == 0)
+        {
+            return;
+        }
+
+        GameObject board = CheckForHighlight();
         if (board)
         {
             if (timer <= 0)
             {
                 CheckForInput();
             }
-            healthBarGameObject.SetActive(true);
-            healthBar.transform.localScale = new Vector3(board.HealthPercentage(), 1, 1);
+            if (board.GetComponent<Board>())
+            {
+                healthBarGameObject.SetActive(true);
+                healthBar.transform.localScale = new Vector3(board.GetComponent<Board>().HealthPercentage(), 1, 1);
+            }
         }
         else if (highlightedObject != null)
         {
-            highlightedObject.Highlight(false);
+            HighlightObject(false);
             highlightedObject = null;
             healthBarGameObject.SetActive(false);
         }
@@ -45,9 +55,10 @@ public class Player : MonoBehaviour {
         {
             timer -= Time.deltaTime;
         }
+
 	}
 
-    private Board CheckForHighlight()
+    private GameObject CheckForHighlight()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         var hits = Physics.RaycastAll(ray);
@@ -55,7 +66,7 @@ public class Player : MonoBehaviour {
         {
             var hitList = new List<RaycastHit>();
             var hit = hits[0];
-            for (int i=0; i < hits.Length; i++)
+            for (int i = 0; i < hits.Length; i++)
             {
                 if (hits[i].distance < hit.distance)
                 {
@@ -66,13 +77,16 @@ public class Player : MonoBehaviour {
             if (hit.distance > 3)
                 return null;
             var gameObjectHit = hit.collider.gameObject;
-            var highlight = gameObjectHit.GetComponent<Board>();
-            if (highlight != null) {
-                highlight.Highlight(true);
-                highlightedObject = highlight;
-                return highlight;
+            Debug.Log(highlightedObject);
+            if (gameObjectHit.GetComponent<Board>() || gameObjectHit.GetComponent<Key>() || gameObjectHit.GetComponent<Journal>())
+            { 
+                if (highlightedObject == null)
+                {
+                    highlightedObject = gameObjectHit;
+                    HighlightObject(true);
+                }
             }
-            return null;
+            return gameObjectHit;
         }
         return null;
     }
@@ -87,9 +101,16 @@ public class Player : MonoBehaviour {
                 var full = board.Repair(repair);
                 if (full)
                 {
-                    highlightedObject.Highlight(false);
-                    highlightedObject = null;
+                    HighlightObject(false);
                 }
+            }
+            else if (highlightedObject.GetComponent<Key>())
+            {
+                highlightedObject.GetComponent<Key>().CollectKey();
+            }
+            else if (highlightedObject.GetComponent<Journal>())
+            {
+                highlightedObject.GetComponent<Journal>().ReadJournal();
             }
             timer = delay;
             return;
@@ -104,7 +125,7 @@ public class Player : MonoBehaviour {
                     var brokeBoard = board.door.AttackDoor(attack, board);
                     if (brokeBoard)
                     {
-                        highlightedObject.Highlight(false);
+                        HighlightObject(false);
                     }
                 }
                 else
@@ -112,7 +133,7 @@ public class Player : MonoBehaviour {
                     var destroyed = board.Damage(attack);
                     if (destroyed && board.window != null && board.window.isDead)
                     {
-                        highlightedObject.Highlight(false);
+                        HighlightObject(false);
                     }
                 }
             }
@@ -120,11 +141,31 @@ public class Player : MonoBehaviour {
         }
     }
 
+    private void HighlightObject(bool highlight)
+    {
+        if (highlightedObject == null)
+        {
+            return;
+        }
+        if (highlightedObject.GetComponent<Board>())
+        {
+            highlightedObject.GetComponent<Board>().Highlight(highlight);
+        }
+        else if (highlightedObject.GetComponent<Journal>())
+        {
+            highlightedObject.GetComponent<Journal>().Highlight(highlight);
+        }
+        else if (highlightedObject.GetComponent<Key>())
+        {
+            highlightedObject.GetComponent<Key>().Highlight(highlight);
+        }
+    }
+
     void OnTriggerEnter(Collider collider)
     {
         if (collider.tag == Tags.Zombie)
         {
-            SceneManager.LoadScene(0);
+            SceneManager.LoadScene(1);
         }
     }
 }
