@@ -6,5 +6,6 @@ using System.Text;
 public class Tags
 {
     public const string Player = "Player";
+    public const string Zombie = "Zombie";
 }
 
