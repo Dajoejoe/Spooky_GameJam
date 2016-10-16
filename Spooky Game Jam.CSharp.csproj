@@ -89,6 +89,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Billboard.cs" />
     <Compile Include="Assets\Scripts\Board.cs" />
+    <Compile Include="Assets\Scripts\CandleFlicker.cs" />
     <Compile Include="Assets\Scripts\Door.cs" />
     <Compile Include="Assets\Scripts\EndTrigger.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />

@@ -54,7 +54,7 @@ public class Player : MonoBehaviour {
                 }
             }
 
-            if (hit.distance > 2)
+            if (hit.distance > 3)
                 return null;
             var gameObjectHit = hit.collider.gameObject;
             var highlight = gameObjectHit.GetComponent<Board>();
@@ -63,8 +63,9 @@ public class Player : MonoBehaviour {
             {
                 highlight.Highlight(true);
                 highlightedObject = highlight;
+                return highlight;
             }
-            return highlight;
+            return null;
         }
         return null;
     }
@@ -84,6 +85,7 @@ public class Player : MonoBehaviour {
                 }
             }
             timer = delay;
+            return;
         }
         if (Input.GetMouseButton(1))
         {

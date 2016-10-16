@@ -37,10 +37,8 @@ public class Board : MonoBehaviour {
     {
         ps.Play();
         AdjustHealth(-amt);
-        Debug.Log("Damage: " + currentHealth);
         if (currentHealth <= 0)
         {
-            Debug.Log("turn off renderer");
             isBroken = true;
             GetComponent<Renderer>().enabled = false;
         }

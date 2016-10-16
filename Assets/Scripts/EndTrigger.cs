@@ -18,7 +18,9 @@ public class EndTrigger : MonoBehaviour {
 
     void OnTriggerEnter(Collider colider)
     {
-        if (colider.tag == Tags.Player)
+        Debug.Log("hit");
+        Debug.Log(colider.gameObject.tag);
+        if (colider.gameObject.tag == Tags.Player)
         {
             SceneManager.LoadScene(nextLevel);
         }
